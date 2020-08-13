@@ -1,3 +1,4 @@
+/// <reference types="../../typings/easyvk" />
 import easyvk from 'easyvk';
 import {VK} from 'easyvk'
 import cr from '../cr'
@@ -26,6 +27,24 @@ class Easyvk {
                 timeout: 400
             }
         });
+    }
+    async getFriends(id: number): Promise<Array<number>> {
+        let vk = await this.vk
+        let friends
+        try {
+            friends = await vk.call("friends.get", {
+                user_id: id,
+                count: 10000
+            })
+        } catch (error) {
+            console.log(error.error_code);
+            friends = []
+        }
+        if (friends.items && friends.items.length>0) {
+            return friends.items
+        } else {
+            return []
+        }
     }
 }
 

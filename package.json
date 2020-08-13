@@ -11,7 +11,7 @@
     "debug": "tsc --watch & nodemon --inspect dist/index.js",
     "ts": "tsc --watch",
     "nodemon": "nodemon dist/index.js",
-    "test": "mocha -r ts-node/register"
+    "test": "mocha -r ts-node/register --extensions ts,tsx"
   },
   "devDependencies": {
     "@types/chai": "^4.2.12",
