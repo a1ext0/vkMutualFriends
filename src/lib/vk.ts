@@ -2,6 +2,7 @@
 import easyvk from 'easyvk';
 import {VK} from 'easyvk'
 import cr from '../cr'
+import counter from '../lib/counter'
 
 class Easyvk {
     vk: Promise<VK>
@@ -32,12 +33,15 @@ class Easyvk {
         let vk = await this.vk
         let friends
         try {
-            friends = await vk.call("friends.get", {
-                user_id: id,
-                count: 10000
-            })
+            let allow = counter.start()
+            if (allow) {
+                friends = await vk.call("friends.get", {
+                    user_id: id,
+                    count: 10000
+                })
+            }
         } catch (error) {
-            console.log(error.error_code);
+            // console.error(error.error_code);
             friends = []
         }
         if (friends.items && friends.items.length>0) {
