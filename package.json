@@ -7,10 +7,11 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsc --watch & nodemon dist/index.js",
+    "build": "tsc && node dist/index.js",
     "debug": "tsc --watch & nodemon --inspect dist/index.js",
     "ts": "tsc --watch",
     "nodemon": "nodemon dist/index.js",
-    "test": "mocha -r ts-node/register src/**/counter.test.ts"
+    "test": "mocha -r ts-node/register"
   },
   "devDependencies": {
     "@types/chai": "^4.2.12",

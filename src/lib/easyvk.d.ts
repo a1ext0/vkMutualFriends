@@ -4,7 +4,7 @@ declare module 'easyvk' {
     const EasyVk: EasyVkStatic;
     export default EasyVk;
 
-    interface VK {
+    export interface VK {
         call(method: string, data?: object, methodType?: string): Promise<any>;
         post(method: string, data?: object): Promise<any>;
         is(error: object, easyVkError: string): boolean;
