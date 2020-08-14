@@ -1,8 +1,8 @@
 import Router from 'koa-router';
-import hands from './hands';
+import friends from './friends';
 
 const router = new Router();
 
-router.use(hands.routes());
+router.use(friends.routes());
 
 export default router;

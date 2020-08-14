@@ -13,9 +13,38 @@ class Friends{
         if (typeof user1 != 'number' || typeof user2 != 'number') {
             return false
         } else {
-            let friends = await vk.getFriends(user1)
+            let friends
+            friends = await vk.getFriends(user1)
             if (friends.length <= 0) {
-                return false
+                let u3 = user1
+                user1 = user2
+                user2 = u3
+                friends = await vk.getFriends(user1)
+                if (friends.length <= 0) {
+                    return false  
+                } else {
+                    if (friends.includes(user2)) {
+                        this.chain.push(user1, user2)
+                        return true
+                    } else {
+                        let i = 0
+                        while (i < friends.length) {
+                            let allow = await counter.start()
+                            if (allow) {
+                                this.compare(friends[i], user2, friends.length)
+                                    .then((is) => {
+
+                                    })
+                            }
+                            i++
+                        }
+                        return new Promise((resolve, reject) => {
+                            eventEmitter.once('friendsDone', () => {
+                                resolve(this.chain)
+                            })
+                        })
+                    }
+                }
             } else {
                 if (friends.includes(user2)) {
                     this.chain.push(user1, user2)
