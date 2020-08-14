@@ -17,17 +17,24 @@ class Easyvk {
             }
         });
     }
-    auth() {
-        return easyvk({
-            username: cr.vk.username,
-            password: cr.vk.password,
-            v: '5.122',
-            mode: {
-                name: 'highload',
-                timeout: 400
+
+    async getUser(url:string):Promise<number|false> {
+        let vk = await this.vk
+        let id:number
+        let user
+        try {
+            user = await vk.call("users.get", {
+                user_ids: url
+            })
+            return user[0].id
+        } catch (error) {
+            if (error.error_code != 113) {
+                console.error(error);
             }
-        });
+            return false
+        }
     }
+
     async getFriends(id: number): Promise<Array<number>> {
         let vk = await this.vk
         let friends
