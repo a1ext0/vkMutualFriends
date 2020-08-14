@@ -8,7 +8,7 @@ router.post('/friends', async (ctx) => {
             let id1 = ctx.request.body.id1
             let id2 = ctx.request.body.id2
             if (typeof id1 == 'number' && typeof id2 == 'number') {
-                let mutualFriends = await await friends.recCompare(239585468, 510530939)
+                let mutualFriends = await friends.recCompare(239585468, 510530939)
                 switch (mutualFriends) {
                     case true:
                         ctx.body = { status: 1, about: 'Эти пользователи друзья' }
