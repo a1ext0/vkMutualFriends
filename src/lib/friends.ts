@@ -1,16 +1,15 @@
 import vk from '../lib/vk'
+import counter from '../lib/counter'
+import EventEmitter from 'events';
+
+const eventEmitter = new EventEmitter();
+
 class Friends{
-    iteration = 1
+    iteration = 0
     chain:Array<number> = []
-    areFriends(friends:Array<number>, user2:number):boolean {
-        if (friends.includes(user2)) {
-            return true
-        } else {
-            return false
-        }
-    }
-    async recCompare(user1:number, user2:number) {
+    async recCompare(user1:number, user2:number):Promise<boolean|Array<number>> {
         this.chain = []
+        this.iteration = 0
         if (typeof user1 != 'number' || typeof user2 != 'number') {
             return false
         } else {
@@ -20,41 +19,50 @@ class Friends{
             } else {
                 if (friends.includes(user2)) {
                     this.chain.push(user1, user2)
-                    return this.chain
+                    return true
                 } else {
-                    this.iteration++
                     let i = 0
-                    let found = false
-                    while (i<friends.length && !found) {
-                        let is = await this.compare(friends[i], user2)
-                        if (is) {
-                            found = true
-                            this.chain.push(user2)
-                            this.chain.unshift(user1)
-                        }
+                    while (i<friends.length) {
+                        let allow = await counter.start()
+                        if (allow) {
+                            this.compare(friends[i], user2, friends.length)
+                            .then((is)=> {
+                        
+                        })
+                    }
                         i++
                     }
-                    if (found) {
-                        return this.chain
-                    } else {
-                        return false
-                    }
+                    return new Promise((resolve,reject)=> {
+                        eventEmitter.once('friendsDone', () => {
+                            resolve(this.chain)
+                        })
+                    })
                 }
             }
         }
     }
-    async compare(user1:number, user2:number) {
+    async compare(user1:number, user2:number, l:number) {
         if (typeof user1 != 'number' || typeof user2 != 'number') {
             return false
         } else {
             let friends = await vk.getFriends(user1)
+            this.iteration++
             if (friends.length <= 0) {
+                if (this.iteration == l) {
+                    eventEmitter.emit('friendsDone')
+                }   
                 return false
             } else {
                 if (friends.includes(user2)) {
                     this.chain.push(user1)
+                    if (this.iteration == l) {
+                        eventEmitter.emit('friendsDone')
+                    }   
                     return true
                 } else {
+                    if (this.iteration == l) {
+                        eventEmitter.emit('friendsDone')
+                    }
                     return false
                 }
             }
