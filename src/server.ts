@@ -6,10 +6,15 @@ import cors from '@koa/cors';
 import log from 'koa-logger';
 import serve from 'koa-static';
 
+let env = process.env.NODE_ENV;
+
 export default function () {
   const app = new Koa();
 
-  app.use(log());
+  if (env != 'production') {
+    app.use(log());
+  }
+
   app.use(cors());
   app.use(serve('./public'));
   app.use(bodyParser());
@@ -23,6 +28,8 @@ export default function () {
   server.on('error', (e) => {
     if (e.name == 'EADDRINUSE') {
       console.error(`Порт ${cr.PORT} занят`);
+    } else {
+      console.error(e);
     }
   });
   return server;
