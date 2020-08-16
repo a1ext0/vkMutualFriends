@@ -6,7 +6,6 @@ import cr from '../cr';
 class Easyvk {
   vk: Promise<VK>;
   constructor() {
-    console.log('const');
     this.vk = easyvk({
       username: cr.vk.username,
       password: cr.vk.password,
@@ -20,7 +19,6 @@ class Easyvk {
 
   async getUser(url: string | number): Promise<number | false> {
     let vk = await this.vk;
-    let id: number;
     let user;
     try {
       user = await vk.call('users.get', {
@@ -35,22 +33,48 @@ class Easyvk {
     }
   }
 
-  async getFriends(id: number): Promise<Array<number>> {
-    let vk = await this.vk;
-    let friends;
-    try {
-      friends = await vk.call('friends.get', {
-        user_id: id,
-        count: 10000,
-      });
-    } catch (error) {
-      if (error.error_code != 30 && error.error_code != 18) {
-        console.error(error);
+  async getInfo(ids: Array<number>): Promise<Array<any> | false> {
+    if (ids.length == 0) {
+      return [];
+    } else {
+      let vk = await this.vk;
+      let users;
+      let strIds = ids.join(',');
+      try {
+        users = await vk.call('users.get', {
+          user_ids: strIds,
+          fields: 'photo_100,domain',
+        });
+        return users;
+      } catch (error) {
+        if (error.error_code != 113) {
+          console.error(error);
+        }
+        return false;
       }
-      friends = [];
     }
-    if (friends.items && friends.items.length > 0) {
-      return friends.items;
+  }
+
+  async getFriends(id: number): Promise<Array<number>> {
+    if (id != 0) {
+      let vk = await this.vk;
+      let friends;
+      try {
+        friends = await vk.call('friends.get', {
+          user_id: id,
+          count: 10000,
+        });
+      } catch (error) {
+        if (error.error_code != 30 && error.error_code != 18) {
+          console.error(error);
+        }
+        friends = [];
+      }
+      if (friends.items && friends.items.length > 0) {
+        return friends.items;
+      } else {
+        return [];
+      }
     } else {
       return [];
     }

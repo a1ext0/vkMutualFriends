@@ -16,7 +16,7 @@ router.post('/friends', async (ctx) => {
       }
       let aId1 = await id1;
       let aId2 = await id2;
-      if (typeof aId1 == 'number' && typeof aId2 == 'number') {
+      if (typeof aId1 == 'number' && typeof aId2 == 'number' && aId1 != aId2) {
         let exists = await Promise.all([id.exists(aId1), id.exists(aId2)]);
         if (!exists[0] || !exists[1]) {
           ctx.status = 422;

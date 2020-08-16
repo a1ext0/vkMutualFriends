@@ -27,12 +27,18 @@ class Id {
   transformUrl(url: string): string | false {
     url = url.replace(/\s+/g, '');
     let regexp = /vk.com\/[a-zA-Z0-9_]{5,32}/i;
+    let regexp2 = /^[a-zA-Z0-9_]{5,32}$/i;
     let name = url.match(regexp);
     if (name && name[0]) {
-      let res = name[0].replace(/vk.com\//, '');
+      let res = name[0].replace(/vk.com\//i, '');
       return res;
     } else {
-      return false;
+      let res = url.match(regexp2);
+      if (res && res[0]) {
+        return res[0];
+      } else {
+        return false;
+      }
     }
   }
 }

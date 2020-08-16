@@ -81,12 +81,12 @@ describe('Friends', function () {
 
     it('16. Работа с удалённым профилем', async () => {
       let res = await friends.recCompare(510530939, 239585468);
-      expect(res).to.have.lengthOf(2);
+      expect(res).to.have.lengthOf(1);
     });
 
     it('17. Работа с удалённым профилем на второй позиции', async () => {
       let res = await friends.recCompare(239585468, 510530939);
-      expect(res).to.have.lengthOf(2);
+      expect(res).to.have.lengthOf(1);
     });
 
     it('18. Работа с двумя удалёнными профилями', async () => {

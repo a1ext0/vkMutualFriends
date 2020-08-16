@@ -120,6 +120,11 @@ describe('class Id', () => {
       let res = id.transformUrl('https://vk.com/a1e_xt0/');
       assert.equal('a1e_xt0', res);
     });
+
+    it('11. Валидный ник', () => {
+      let res = id.transformUrl('a1ext0');
+      assert.equal('a1ext0', res);
+    });
   });
 
   describe('#urlToId()', () => {

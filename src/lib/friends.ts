@@ -25,14 +25,23 @@ class Friends {
           return false;
         } else {
           let res = await this.worker(friends[1], user2, user1);
+          if (Array.isArray(res)) {
+            res = await vk.getInfo(res);
+          }
           return res;
         }
       } else {
         if (friends[1].length == 0) {
           let res = await this.worker(friends[0], user1, user2);
+          if (Array.isArray(res)) {
+            res = await vk.getInfo(res);
+          }
           return res;
         } else {
           let res = await this.fastWorker(friends[0], friends[1], user1, user2);
+          if (Array.isArray(res)) {
+            res = await vk.getInfo(res);
+          }
           return res;
         }
       }
